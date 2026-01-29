@@ -5,9 +5,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string.h>
-
+#include "../include/html_server.h"
+#include "../include/request_handler.h"
 
 #define PORT 8080
+
+char response[1000];
 
 int main(){
 
@@ -17,6 +20,7 @@ int main(){
 
     int opt = 1;
 
+    char* html_content = serve_html("../src/html/index.html");
     
 
     int address_len = sizeof(address);
@@ -54,27 +58,22 @@ int main(){
         memset(buffer, 0, sizeof(buffer));
         printf("New Connection!\n");
 
-        char method[32], http_version[32], ip[32];
+        char method[32], path[32], http_version[32], ip[32];
 
         read(new_socket, buffer, 40000);
         char *str_input_buffer = buffer;
-        const char *http_format = "%10s / %8s \r\nHost: %16s";                    //format string vulnerability, buffer skickas in av användaren
-        sscanf(str_input_buffer, http_format,method,http_version,ip); //format string vulnerability, buffer skickas in av användaren
+        const char *http_format = "%10s /%32s HTTP/%8s \r\nHost: %16s";                    //format string vulnerability, buffer skickas in av användaren
+        sscanf(str_input_buffer, http_format,method,path,http_version,ip); //format string vulnerability, buffer skickas in av användaren
+        
         printf("Method: %s\n",method);
+        printf("Path: %s\n",path);
         printf("IP: %s\n",ip);
         printf("Version: %s\n\n",http_version);
-        printf("%s\n",buffer);
-        const char *response = 
-            "HTTP/1.1 200 OK\r\n"
-            "Context-Type: text/plain\r\n"
-            "Content-Length: 12\r\n"
-            "\r\n"
-            "MessageHere\r\n";
         
-        write(new_socket, response, strlen(response));
-        close(new_socket);
+        printf("%s\n",buffer);
+        
+        handle_request(new_socket);
     }
-    
     close(server_fd);
     return 0;   
 }
