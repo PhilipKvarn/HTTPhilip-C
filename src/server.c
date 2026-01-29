@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "../include/request_handler.h"
+#include "../include/request_parser.h"
 #include "../include/socket_handler.h"
 #include "../include/server.h"
 
@@ -25,6 +26,7 @@ void run_server(int server_port){
     listen(server_fd, 3);
     printf("Listening to port 8080....\n");
     while (true) {
+        
         printf("Waiting for connection...\n");
         client_socket = accept_connection(server_fd, &address);
         if (client_socket < 0) {
@@ -35,17 +37,18 @@ void run_server(int server_port){
         memset(buffer, 0, sizeof(buffer));
         printf("New Connection!\n");
 
-        char method[32], path[32], http_version[32], ip[32];
-
         read(client_socket, buffer, 40000);
         char *str_input_buffer = buffer;
-        const char *http_format = "%10s /%32s HTTP/%8s \r\nHost: %16s";              //format string vulnerability, buffer skickas in av användaren
-        sscanf(str_input_buffer, http_format,method,path,http_version,ip); //format string vulnerability, buffer skickas in av användaren
-        
-        printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",method,path,ip,http_version);        
-        printf("%s\n",buffer);
-        
-        handle_request(client_socket);
+
+        struct HttpRequest request;
+        if (parse_http_request(str_input_buffer, &request) == 0) {
+            printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",request.method,request.path,request.host,request.http_version);        
+            printf("%s\n",buffer);
+            handle_request(client_socket);
+        } else {
+            printf("failed request parsing\n");
+            close(client_socket);
+        } 
     }
     close(server_fd);
     return;   
