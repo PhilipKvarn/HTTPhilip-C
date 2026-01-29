@@ -54,7 +54,15 @@ int main(){
         memset(buffer, 0, sizeof(buffer));
         printf("New Connection!\n");
 
+        char method[32], http_version[32], ip[32];
+
         read(new_socket, buffer, 40000);
+        char *str_input_buffer = buffer;
+        const char *http_format = "%10s / %8s \r\nHost: %16s";                    //format string vulnerability, buffer skickas in av användaren
+        sscanf(str_input_buffer, http_format,method,http_version,ip); //format string vulnerability, buffer skickas in av användaren
+        printf("Method: %s\n",method);
+        printf("IP: %s\n",ip);
+        printf("Version: %s\n\n",http_version);
         printf("%s\n",buffer);
         const char *response = 
             "HTTP/1.1 200 OK\r\n"
