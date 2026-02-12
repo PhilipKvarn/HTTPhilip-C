@@ -1,9 +1,6 @@
 #ifndef REQUEST_PARSER_H
 #define REQUEST_PARSER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 struct HttpRequest{
     char method[256];
     char path[256];

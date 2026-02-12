@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "../include/request_parser.h"
 
 int parse_http_request(const char* buffer, struct HttpRequest *request){
@@ -18,7 +21,6 @@ int parse_http_request(const char* buffer, struct HttpRequest *request){
     if (is_parsed == 4) {
         return EXIT_SUCCESS;
     } else {
-        printf("exitfailure 2");
         return EXIT_FAILURE;
     }
 

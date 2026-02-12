@@ -2,13 +2,17 @@
 #include <string.h>
 #include <unistd.h>
 #include "../include/request_handler.h"
+#include "../include/request_parser.h"
 #include "../include/html_server.h"
 
 #define BUFFER_SIZE  1024
 
-void handle_request(int new_socket){
+void handle_request(int new_socket, struct HttpRequest *request){
 
-    char* html_content = serve_html("../public/index.html");
+    char* html_content;
+
+    html_content = serve_html("../public/index.html");
+
     if (html_content) {
         const char* content_header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
         write(new_socket, content_header, strlen(content_header));

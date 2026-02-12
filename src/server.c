@@ -45,7 +45,7 @@ void run_server(int server_port){
         if (parse_http_request(str_input_buffer, &request) == 0) {
             printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",request.method,request.path,request.host,request.http_version);        
             printf("%s\n",buffer);
-            handle_request(client_socket);
+            handle_request(client_socket , &request);
         } else {
             printf("failed request parsing\n");
             close(client_socket);
