@@ -1,6 +1,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string.h>
@@ -27,6 +28,7 @@ void run_server(int server_port){
     }
 
     register_route("GET", "/", handle_get_index);
+    register_route("GET", "/Create", handle_get_create);
         
     
     listen(server_fd, 3);
@@ -42,18 +44,24 @@ void run_server(int server_port){
         
         struct HttpRequest request;
 
-        
         memset(buffer, 0, sizeof(buffer));
         printf("New Connection!\n");
 
         read(client_socket, buffer, 40000);
         char *str_input_buffer = buffer;
-
         
         if (parse_http_request(str_input_buffer, &request) == 0) {
             printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",request.method,request.path,request.host,request.http_version);        
             printf("%s\n",buffer);
-            handle_request(client_socket , &request);
+            //handle_request(client_socket, &request);
+            RouteHandler handleRoute;
+            handleRoute = (find_route(request.method, request.path));
+            if (handleRoute == NULL) {
+                printf("couldn't fine route, NULL");
+            } 
+            else {
+                handleRoute(client_socket,&request);
+            }
         } else {
             printf("failed request parsing\n");
             close(client_socket);
