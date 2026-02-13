@@ -6,8 +6,10 @@
 #include <string.h>
 #include "../include/request_handler.h"
 #include "../include/request_parser.h"
+#include "../include/request_router.h"
 #include "../include/socket_handler.h"
 #include "../include/server.h"
+#include "route_functions.c"
 
 void run_server(int server_port){
 
@@ -23,6 +25,9 @@ void run_server(int server_port){
         perror("Failed to create server socket");
         return;
     }
+
+    register_route("GET", "/", handle_get_index);
+        
     
     listen(server_fd, 3);
     printf("Listening to port 8080....\n");
@@ -35,13 +40,16 @@ void run_server(int server_port){
             continue;
         }
         
+        struct HttpRequest request;
+
+        
         memset(buffer, 0, sizeof(buffer));
         printf("New Connection!\n");
 
         read(client_socket, buffer, 40000);
         char *str_input_buffer = buffer;
 
-        struct HttpRequest request;
+        
         if (parse_http_request(str_input_buffer, &request) == 0) {
             printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",request.method,request.path,request.host,request.http_version);        
             printf("%s\n",buffer);

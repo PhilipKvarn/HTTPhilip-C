@@ -33,11 +33,3 @@ RouteHandler find_route(const char *method, const char *path){
     return NULL;
 }
 
-//
-//  init new route with
-//  void handle_get_index(int socket, struct HttpRequest *request)
-//
-void handle_get_index(int socket, struct HttpRequest *request){
-    
-}
-
