@@ -3,21 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
     <style>
-        *{
-            color:red;
-            padding: 1rem;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="datetime-local"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .back-link {
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
         }
     </style>
-    <title>A webpage</title>
 </head>
 <body>
-    <h2>create page</h2>
-    <form action="" method="get">
-        <input type="text" name="" id="">
-        <input type="submit" value="Create">
-        
+    <h1>Create New Event</h1>
+    <form method="POST" action="/Create">
+        <div class="form-group">
+            <label for="poster_name">Your Name *</label>
+            <input type="text" id="poster_name" name="poster_name" required maxlength="256" placeholder="Enter your name">
+        </div>
 
+        <div class="form-group">
+            <label for="title">Event Title *</label>
+            <input type="text" id="title" name="title" required maxlength="128" placeholder="Enter event title">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" required maxlength="2048" placeholder="Enter event description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="event_date">Event Date & Time *</label>
+            <input type="datetime-local" id="event_date" name="event_date" required>
+        </div>
+
+        <button type="submit">Create Event</button>
     </form>
+
+    <div class="back-link">
+        <a href="/">&larr; Back to Events</a>
+    </div>
 </body>
 </html>

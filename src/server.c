@@ -27,7 +27,8 @@ void run_server(int server_port){
     }
 
     register_route("GET", "/", handle_get_index);
-    register_route("GET", "/Create", handle_get_create); 
+    register_route("GET", "/Create", handle_get_create);
+    register_route("POST", "/Create", handle_post_create);
     
     listen(server_fd, 3);
     printf("Listening to port 8080....\n");
@@ -64,6 +65,7 @@ void run_server(int server_port){
             close(client_socket);
         } 
     }
+    close_database();
     close(server_fd);
     return;   
 }
