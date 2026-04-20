@@ -10,6 +10,7 @@ int parse_http_request(const char* buffer, struct HttpRequest *request){
 
     memset(request, 0, sizeof(struct HttpRequest));
 
+    // storlekar på texten vi söker efter är -1 av HTTP char buffern
     const char *http_format = "%31s %255s HTTP/%31s \r\nHost: %255s";
     int is_parsed = sscanf(buffer, http_format,
         request->method,

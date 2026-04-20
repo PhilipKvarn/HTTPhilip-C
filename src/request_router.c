@@ -22,12 +22,10 @@ void register_route(const char *method, const char *path, RouteHandler handler){
 }
 
 RouteHandler find_route(const char *method, const char *path){
-    printf("found route: %s --> %s",method,path);
-
     for (int i = 0; i <= route_count; i++) {
         if (
-            strcmp(routes[i].method, method) == 0 && 
-            strcmp(routes[i].path,path) == 0  
+            strncmp(routes[i].method, method,8) == 0 && 
+            strncmp(routes[i].path,path,8) == 0  
         ) {
             return routes[i].handler;
         }   

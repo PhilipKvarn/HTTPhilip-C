@@ -20,7 +20,6 @@ void run_server(int server_port){
     int address_len = sizeof(address);
     char buffer[40000] = {0};
     
-
     int server_fd = create_server_socket(server_port);
     if (server_fd < 0) {
         perror("Failed to create server socket");
@@ -28,8 +27,7 @@ void run_server(int server_port){
     }
 
     register_route("GET", "/", handle_get_index);
-    register_route("GET", "/Create", handle_get_create);
-        
+    register_route("GET", "/Create", handle_get_create); 
     
     listen(server_fd, 3);
     printf("Listening to port 8080....\n");
@@ -41,7 +39,7 @@ void run_server(int server_port){
             perror("Accept failed.\n");
             continue;
         }
-        
+
         struct HttpRequest request;
 
         memset(buffer, 0, sizeof(buffer));
@@ -51,13 +49,12 @@ void run_server(int server_port){
         char *str_input_buffer = buffer;
         
         if (parse_http_request(str_input_buffer, &request) == 0) {
-            printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",request.method,request.path,request.host,request.http_version);        
+            printf("Method: %s\r\nPath: %s\r\nIP: %s\r\nVersion: %s\r\n",request.method,request.path,request.host,request.http_version);
             printf("%s\n",buffer);
-            //handle_request(client_socket, &request);
             RouteHandler handleRoute;
             handleRoute = (find_route(request.method, request.path));
             if (handleRoute == NULL) {
-                printf("couldn't fine route, NULL");
+                printf("couldn't fine route, Route returned = NULL");
             } 
             else {
                 handleRoute(client_socket,&request);
